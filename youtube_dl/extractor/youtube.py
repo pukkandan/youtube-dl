@@ -1906,7 +1906,8 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             self._downloader.report_warning('Unable to extract video title')
             video_title = '_'
 
-        description_original = video_description = get_element_by_id("eow-description", video_webpage)
+        m_description = re.search(r'"description":{"runs":\[{"text":"(.*?)"}\]}', video_webpage)
+        description_original = video_description = m_description.group(1).replace('\\n', '\n')
         if video_description:
 
             def replace_url(m):
@@ -1928,7 +1929,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
                 [^<]+\.{3}\s*
                 </a>
             ''', replace_url, video_description)
-            video_description = clean_html(video_description)
+            #video_description = clean_html(video_description)
         else:
             video_description = self._html_search_meta('description', video_webpage) or video_details.get('shortDescription')
 
