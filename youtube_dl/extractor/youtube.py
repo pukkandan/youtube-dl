@@ -2327,7 +2327,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         # Youtube Music Auto-generated description
         release_date = release_year = None
         if video_description:
-            mobj = re.search(r'(?s)Provided to YouTube by [^\n]+\n+(?P<track>[^·]+)·(?P<artist>[^\n]+)\n+(?P<album>[^\n]+)(?:.+?℗\s*(?P<release_year>\d{4})(?!\d))?(?:.+?Released on\s*:\s*(?P<release_date>\d{4}-\d{2}-\d{2}))?(.+?\nArtist\s*:\s*(?P<clean_artist>[^\n]+))?', video_description)
+            mobj = re.search(r'(?s)(?:Provided to YouTube by [^\n]+\n+)?(?P<track>[^·]+)·(?P<artist>[^\n]+)\n+(?P<album>[^\n]+)(?:.+?℗\s*(?P<release_year>\d{4})(?!\d))?(?:.+?Released on\s*:\s*(?P<release_date>\d{4}-\d{2}-\d{2}))?(.+?\nArtist\s*:\s*(?P<clean_artist>[^\n]+))?', video_description)
             if mobj:
                 if not track:
                     track = mobj.group('track').strip()
