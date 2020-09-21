@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 
 import os
+import shutil
 import subprocess
 
 from .ffmpeg import FFmpegPostProcessor
@@ -55,7 +56,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
                 self._downloader.to_screen(
                     '[ffmpeg] Correcting extension to webp and escaping path for thumbnail "%s"' % thumbnail_filename)
                 thumbnail_webp_filename = replace_extension(thumbnail_filename, 'webp')
-                os.rename(encodeFilename(thumbnail_filename), encodeFilename(thumbnail_webp_filename))
+                shutil.move(encodeFilename(thumbnail_filename), encodeFilename(thumbnail_webp_filename))
                 thumbnail_filename = thumbnail_webp_filename
                 thumbnail_ext = 'webp'
 
@@ -64,15 +65,15 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
             # NB: % is supposed to be escaped with %% but this does not work
             # for input files so working around with standard substitution
             escaped_thumbnail_filename = thumbnail_filename.replace('%', '#')
-            os.rename(encodeFilename(thumbnail_filename), encodeFilename(escaped_thumbnail_filename))
+            shutil.move(encodeFilename(thumbnail_filename), encodeFilename(escaped_thumbnail_filename))
             escaped_thumbnail_jpg_filename = replace_extension(escaped_thumbnail_filename, 'jpg')
             self._downloader.to_screen('[ffmpeg] Converting thumbnail "%s" to JPEG' % escaped_thumbnail_filename)
             self.run_ffmpeg(escaped_thumbnail_filename, escaped_thumbnail_jpg_filename, ['-bsf:v', 'mjpeg2jpeg'])
-            os.remove(encodeFilename(escaped_thumbnail_filename))
             thumbnail_jpg_filename = replace_extension(thumbnail_filename, 'jpg')
             # Rename back to unescaped for further processing
-            os.rename(encodeFilename(escaped_thumbnail_jpg_filename), encodeFilename(thumbnail_jpg_filename))
+            shutil.move(encodeFilename(escaped_thumbnail_jpg_filename), encodeFilename(thumbnail_jpg_filename))
             thumbnail_filename = thumbnail_jpg_filename
+            os.remove(encodeFilename(escaped_thumbnail_filename))
 
         if info['ext'] == 'mp3':
             options = [
@@ -86,10 +87,10 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
             if not self._already_have_thumbnail:
                 os.remove(encodeFilename(thumbnail_filename))
             os.remove(encodeFilename(filename))
-            os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+            shutil.move(encodeFilename(temp_filename), encodeFilename(filename))
 
         elif info['ext'] == 'mkv':
-            os.rename(encodeFilename(thumbnail_filename), encodeFilename('cover.jpg'))
+            shutil.move(encodeFilename(thumbnail_filename), encodeFilename('cover.jpg'))
             old_thumbnail_filename = thumbnail_filename
             thumbnail_filename = 'cover.jpg'
 
@@ -103,9 +104,9 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
             if not self._already_have_thumbnail:
                 os.remove(encodeFilename(thumbnail_filename))
             else:
-                os.rename(encodeFilename(thumbnail_filename), encodeFilename(old_thumbnail_filename))
+                shutil.move(encodeFilename(thumbnail_filename), encodeFilename(old_thumbnail_filename))
             os.remove(encodeFilename(filename))
-            os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+            shutil.move(encodeFilename(temp_filename), encodeFilename(filename))
 
         elif info['ext'] in ['m4a', 'mp4']:
             if not check_executable('AtomicParsley', ['-v']):
@@ -138,7 +139,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
                 self._downloader.report_warning('The file format doesn\'t support embedding a thumbnail')
             else:
                 os.remove(encodeFilename(filename))
-                os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+                shutil.move(encodeFilename(temp_filename), encodeFilename(filename))
         else:
             raise EmbedThumbnailPPError('Only mp3 and m4a/mp4 are supported for thumbnail embedding for now.')
 
