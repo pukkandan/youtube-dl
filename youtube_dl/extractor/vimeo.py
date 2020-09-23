@@ -259,26 +259,30 @@ class VimeoIE(VimeoBaseInfoExtractor):
     # _VALID_URL matches Vimeo URLs
     _VALID_URL = r'''(?x)
                     https?://
-                        (?:
+                        (
                             (?:
-                                www|
-                                player
-                            )
-                            \.
-                        )?
-                        vimeo(?:pro)?\.com/
-                        (?!(?:channels|album|showcase)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)
-                        (?:.*?/)?
-                        (?:
-                            (?:
-                                play_redirect_hls|
-                                moogaloop\.swf)\?clip_id=
+                                (?:
+                                    www|
+                                    player
+                                )
+                                \.
                             )?
-                        (?:videos?/)?
+                            p?vimeo(?:pro)?\.com/
+                            (?!(?:channels|album|showcase)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)
+                            (?:.*?/)?
+                            (?:
+                                (?:
+                                    play_redirect_hls|
+                                    moogaloop\.swf
+                                )\?clip_id=
+                            )?
+                            (?:videos?/)?
+                            |yiff.party/vimeo/
+                        )
                         (?P<id>[0-9]+)
                         (?:/[\da-f]+)?
                         /?(?:[?&].*)?(?:[#].*)?$
-                    '''
+                '''
     IE_NAME = 'vimeo'
     _TESTS = [
         {
@@ -577,7 +581,11 @@ class VimeoIE(VimeoBaseInfoExtractor):
         video_id = self._match_id(url)
         orig_url = url
         is_pro = 'vimeopro.com/' in url
-        is_player = '://player.vimeo.com/video/' in url
+        is_player = (
+            '://player.vimeo.com/video/' in url or
+            "://yiff.party/vimeo/" in url or # only works with correct referer
+            "://pvimeo.com/" in url or
+            "://www.pvimeo.com/" in url )
         if is_pro:
             # some videos require portfolio_id to be present in player url
             # https://github.com/ytdl-org/youtube-dl/issues/20070
