@@ -411,11 +411,10 @@ def parseOpts(overrideArguments=None):
         action='store', dest='format_sort', metavar='FORMAT', default=None,
         help=(
             'Sort the formats by the fields given. '
-            'Default order: preference, language_preference, '
-            'quality, tbr, filesize, vbr, height, width, '
-            'proto_preference, ext_preference, codec_preference, '
-            'abr, audio_ext_preference, audio_codec_preference, '
-            'fps, filesize_approx, source_preference, format_id. '
+            'Default order: avoid_bad, has_video, has_audio, extractor, '
+            'language, quality, tbr, filesize, vbr, height, width, '
+            'proto, ext, codec, abr, audio_ext, audio_codec, '
+            'fps, filesize_approx, source, format_id. '
             'Prefix the field (except format_id) by a + to '
             'perform the sort in reverse. Suffix the field with '
             ':NUMBER to give highest preference to "NUMBER". '
@@ -432,13 +431,15 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='format_sort_force', metavar='FORMAT', default=False,
         help=(
             'User specified sort order takes priority even over '
-            'preference and language_preference'))
+            'avoid_bad, has_video, has_audio, extractor and language. '
+            'These fields normally filter out the undesirable formats. '
+            'So use this option with caution. '))
     video_format.add_option(
         '--no-format-sort-force',
         action='store_false', dest='format_sort_force', metavar='FORMAT', default=False,
         help=(
-            'preference and language_preference takes priority over'
-            'the user specified sort order (default)'))
+            'avoid_bad, has_video, has_audio, extractor and language '
+            'takes priority over any user specified sort order (default)'))
     video_format.add_option(
         '--all-formats',
         action='store_const', dest='format', const='all',
