@@ -1368,16 +1368,16 @@ class InfoExtractor(object):
 
             return  (tuple()
                         if self._downloader.params.get('format_sort_force')
-                        else ('avoid_bad', 'has_video', 'has_audio', 'extractor', 'language')) + \
+                        else ('avoid_bad', 'has_video', 'extractor', 'language')) + \
                     tuple(sort) + \
                     (tuple(field_preference)
                         if isinstance(field_preference, (list, tuple))
                         else tuple()) + \
-                    ('avoid_bad', 'has_video', 'has_audio', 'extractor', 'language', 'quality', # default order
-                     'tbr', 'filesize', 'vbr', 'height', 'width',
-                     'proto', 'ext', 'codec', 'abr', 'audio_ext', 'audio_codec',
-                     'fps', 'filesize_approx', 'source', 'format_id')
-
+                    ('avoid_bad', 'has_video', 'extractor', 'language',  # default order
+                     'height', 'width', 'proto', 'fps', 'codec', 
+                     'filesize', 'filesize_approx', 'tbr', 'vbr', 
+                     'has_audio', 'abr', 'audio_codec',
+                     'quality', 'source', 'format_id')
         sort = {}
         for item in _get_sort_list():
             item = item.split(":", 1)

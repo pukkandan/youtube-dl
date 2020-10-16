@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.16.00-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.16.01-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -40,9 +40,6 @@ youtube-dl - download videos from youtube.com or other video platforms
 
 ### New Features
 
-#### 2020.10.16.00
-* Format Sort: Added some new fields and renamed old fields
-
 #### 2020.09.22.00
 * Format Sort: `--format-sort`, `--format-sort-force`
 * Negative Options: `--no-include-ads`, `--no-write-sub`, `--no-write-auto-sub`, `--no-playlist-reverse`, `--no-restrict-filenames`, `--youtube-include-dash-manifest`, `--no-format-sort-force`
@@ -64,6 +61,13 @@ youtube-dl - download videos from youtube.com or other video platforms
 * Fix for embedding thumbnail in mp3 by @pauldubois98
 
 ### Other Changes
+
+#### 2020.10.16.00
+* Format Sort: Changed default sort order. This version will select different format from previous ones at default settings
+* Format Selection: 'bestvideo' and 'worstvideo' can now download formats with both video and audio
+
+#### 2020.10.16.00
+* Format Sort: Added some new fields and renamed old fields
 
 #### 2020.09.22.00
 * Restructured README.md
@@ -418,10 +422,9 @@ In order to update, simply repeat the process.
                                      SELECTION" for all the info
                                      Note that the OS caches the URL based on the file path.
     --format-sort SORTORDER          Sort the formats by the fields given. 
-                                     Default order: avoid_bad, has_video, has_audio, extractor, 
-                                     language, quality, tbr, filesize, vbr, height, width, 
-                                     proto, ext, codec, abr, audio_ext, audio_codec, 
-                                     fps, filesize_approx, source, format_id.
+                                     Default order: avoid_bad, has_video, extractor, language, 
+                                     height, width, proto, fps, codec, filesize, filesize_approx, 
+                                     tbr, vbr, has_audio, abr, audio_codec, quality, source, format_id.
                                      Prefix the field (except format_id) by a + to 
                                      perform the sort in reverse. Suffix the field with 
                                      :NUMBER to give highest preference to "NUMBER". 
@@ -434,10 +437,10 @@ In order to update, simply repeat the process.
                                      video with largest bitrate with the largest height<=720 
                                      (or smallest height available if there is no such format)
     --format-sort-force              User specified sort order takes priority even over
-                                     avoid_bad, has_video, has_audio, extractor and language. 
+                                     avoid_bad, has_video, extractor and language. 
                                      These fields normally filter out the undesirable formats. 
                                      So use this option with caution. 
-    --no-format-sort-force           avoid_bad, has_video, has_audio, extractor and language
+    --no-format-sort-force           avoid_bad, has_video, extractor and language
                                      takes priority over any user specified sort order (default)
     --all-formats                    Download all available video formats
     --prefer-free-formats            Prefer free video formats unless a specific

@@ -1302,15 +1302,11 @@ class YoutubeDL(object):
                         if audio_formats:
                             yield audio_formats[0]
                     elif format_spec == 'bestvideo':
-                        video_formats = [
-                            f for f in formats
-                            if f.get('acodec') == 'none']
+                        video_formats = formats
                         if video_formats:
                             yield video_formats[-1]
                     elif format_spec == 'worstvideo':
-                        video_formats = [
-                            f for f in formats
-                            if f.get('acodec') == 'none']
+                        video_formats = formats
                         if video_formats:
                             yield video_formats[0]
                     else:
@@ -2276,7 +2272,7 @@ class YoutubeDL(object):
             for f in formats
             if f.get('preference') is None or f['preference'] >= -1000]
         if len(formats) > 1:
-            table[-1][-1] += (' ' if table[-1][-1] else '') + '(best)'
+            table[-1][-1] += (' ' if table[-1][-1] else '') + '(bestvideo)'
 
         header_line = ['format code', 'extension', 'resolution', 'note']
         self.to_screen(
