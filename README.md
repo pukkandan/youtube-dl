@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.17.00-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.17.01-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -39,6 +39,9 @@ youtube-dl - download videos from youtube.com or other video platforms
 # CHANGES
 
 ### New Features
+
+#### 2020.10.17.01
+* Live Chat: Can download live chat using `--write-sub --sub-lang live_chat`
 
 #### 2020.09.22.00
 * Format Sort: `--format-sort`, `--format-sort-force`
