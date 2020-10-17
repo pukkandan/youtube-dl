@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.16.01-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.17.00-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -62,9 +62,12 @@ youtube-dl - download videos from youtube.com or other video platforms
 
 ### Other Changes
 
-#### 2020.10.16.00
-* Format Sort: Changed default sort order. This version will select different format from previous ones at default settings
-* Format Selection: 'bestvideo' and 'worstvideo' can now download formats with both video and audio
+#### 2020.10.17.00
+* Format Selection: Relaxed validation for format filters so that any arbitrary field can be now used
+
+#### 2020.10.16.01
+* Format Sort: Changed default sort order. This version may select format that is different from previous versions, at the same settings
+* Format Selection: 'bestvideo' and 'worstvideo' can now download formats that also has audio
 
 #### 2020.10.16.00
 * Format Sort: Added some new fields and renamed old fields
