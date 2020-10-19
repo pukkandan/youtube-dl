@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.17.01-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.17.02-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -53,6 +53,9 @@ youtube-dl - download videos from youtube.com or other video platforms
 * Shortcut Options: `--write-link`, `--write-url-link`, `--write-webloc-link`, `--write-desktop-link` by @h-h-h-h
 
 ### Fixes
+
+#### 2020.10.17.02
+* Fix for issue with external downloaders introduced by [live chat](https://github.com/pukkandan/youtube-dl/pull/17)
 
 #### 2020.09.23.00
 * Dropped [#8](https://github.com/pukkandan/youtube-dl/commit/5bc0c7eb03d132fa121462b73f836be8b422ae53). This has been fixed in the main repo
