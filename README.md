@@ -128,7 +128,9 @@ In order to update, simply repeat the process.
                                      
     -i, --ignore-errors              Continue on download errors, for example to
                                      skip unavailable videos in a playlist (default)
+                                     (Same as --no-abort-on-error)
     --abort-on-error                 Abort downloading of further videos if an error
+                                     occurs (Same as --no-ignore-errors)
     --dump-user-agent                Display the current browser identification
     --list-extractors                List all supported extractors
     --extractor-descriptions         Output descriptions of all supported
@@ -144,7 +146,7 @@ In order to update, simply repeat the process.
                                      an error. The default value "fixup_error"
                                      repairs broken URLs, but emits an error if
                                      this is not possible instead of searching.
-    --ignore-config                  Do not read configuration files. When given
+    --ignore-config, --no-config     Do not read configuration files. When given
                                      in the global configuration file
                                      /etc/youtube-dl.conf: Do not read the user
                                      configuration in ~/.config/youtube-
@@ -249,6 +251,7 @@ In order to update, simply repeat the process.
     --download-archive FILE          Download only videos not listed in the
                                      archive file. Record the IDs of all
                                      downloaded videos in it.
+    --no-download-archive            Do not use archive file (default)
     --break-on-existing              Stop the download process after attempting
                                      to download a file that's in the archive.
     --include-ads                    Download advertisements as well
@@ -263,19 +266,22 @@ In order to update, simply repeat the process.
     --fragment-retries RETRIES       Number of retries for a fragment (default
                                      is 10), or "infinite" (DASH, hlsnative and
                                      ISM)
-    --skip-unavailable-fragments     Skip unavailable fragments (DASH, hlsnative
-                                     and ISM)
+    --skip-unavailable-fragments     Skip unavailable fragments for DASH,
+                                     hlsnative and ISM (default)
+                                     (Same as --no-abort-on-unavailable-fragment)
     --abort-on-unavailable-fragment  Abort downloading when some fragment is not
                                      available
+                                     (Same as --no-skip-unavailable-fragments)
     --keep-fragments                 Keep downloaded fragments on disk after
-                                     downloading is finished; fragments are
-                                     erased by default
+                                     downloading is finished
+    --no-keep-fragments              Delete downloaded fragments after downloading
+                                     is finished (default)
     --buffer-size SIZE               Size of download buffer (e.g. 1024 or 16K)
                                      (default is 1024)
+    --resize-buffer                  The buffer size is automatically resized from 
+                                     an initial value of --buffer-size (default)
     --no-resize-buffer               Do not automatically adjust the buffer
-                                     size. By default, the buffer size is
-                                     automatically resized from an initial value
-                                     of SIZE.
+                                     size
     --http-chunk-size SIZE           Size of a chunk for chunk-based HTTP
                                      downloading (e.g. 10485760 or 10M) (default
                                      is disabled). May be useful for bypassing
@@ -316,25 +322,31 @@ In order to update, simply repeat the process.
     --no-restrict-filenames          Allow Unicode characters, "&" and spaces
                                      in filenames (default)
     -w, --no-overwrites              Do not overwrite files
-    -c, --continue                   Force resume of partially downloaded files.
-                                     By default, youtube-dl will resume
-                                     downloads if possible.
+    -c, --continue                   Resume partially downloaded files (default)
     --no-continue                    Do not resume partially downloaded files
                                      (restart from beginning)
+    --part                           Use .part files instead of writing directly 
+                                     into output file (default)
     --no-part                        Do not use .part files - write directly
                                      into output file
+    --mtime                          Use the Last-modified header to set the 
+                                     file modification time
     --no-mtime                       Do not use the Last-modified header to set
                                      the file modification time
     --write-description              Write video description to a .description
                                      file
+    --no-write-description           Do not write video description (default)
     --write-info-json                Write video metadata to a .info.json file
+    --no-write-info-json             Do not write video metadata (default)
     --write-annotations              Write video annotations to a
                                      .annotations.xml file
+    --no-write-annotations           Do not write video annotations (default)
     --load-info-json FILE            JSON file containing the video information
                                      (created with the "--write-info-json"
                                      option)
     --cookies FILE                   File to read cookies from and dump cookie
                                      jar in
+    --no-cookies                     Do not read/dump cookies (default)
     --cache-dir DIR                  Location in the filesystem where youtube-dl
                                      can store some downloaded information
                                      permanently. By default
@@ -348,6 +360,7 @@ In order to update, simply repeat the process.
 
 ## Thumbnail images:
     --write-thumbnail                Write thumbnail image to disk
+    --no-write-thumbnail             Do not write thumbnail image to disk
     --write-all-thumbnails           Write all thumbnail image formats to disk
     --list-thumbnails                Simulate and list all available thumbnail
                                      formats
@@ -460,8 +473,10 @@ In order to update, simply repeat the process.
                                      videos
     --youtube-skip-dash-manifest     Do not download the DASH manifests and
                                      related data on YouTube videos
-    youtube-include-dash-manifest    Download the DASH manifests and related data 
+                                     (Same as --no-youtube-include-dash-manifest)
+    --youtube-include-dash-manifest  Download the DASH manifests and related data 
                                      on YouTube videos (default)
+                                     (Same as --no-youtube-skip-dash-manifest)
     --merge-output-format FORMAT     If a merge is required (e.g.
                                      bestvideo+bestaudio), output to given
                                      container format. One of mkv, mp4, ogg,
@@ -523,15 +538,19 @@ In order to update, simply repeat the process.
                                      necessary (currently supported:
                                      mp4|flv|ogg|webm|mkv|avi)
     --postprocessor-args ARGS        Give these arguments to the postprocessor
-    -k, --keep-video                 Keep the video file on disk after the post-
-                                     processing; the video is erased by default
-    --no-post-overwrites             Do not overwrite post-processed files; the
-                                     post-processed files are overwritten by
-                                     default
+    -k, --keep-video                 Keep the intermediate video file on disk 
+                                     after post-processing
+    --no-keep-video                  Delete the intermediate video file after 
+                                     post-processing (default)
+    --post-overwrites                Overwrite post-processed files (default)
+    --no-post-overwrites             Do not overwrite post-processed files
     --embed-subs                     Embed subtitles in the video (only for mp4,
                                      webm and mkv videos)
+    --no-embed-subs                  Do not embed subtitles in the video (default)
     --embed-thumbnail                Embed thumbnail in the audio as cover art
+    --no-embed-thumbnail             Do not embed thumbnail (default)
     --add-metadata                   Write metadata to the video file
+    --no-add-metadata                Do not write metadata (default)
     --metadata-from-title FORMAT     Parse additional metadata like song title /
                                      artist from the video title. The format
                                      syntax is the same as --output. Regular
@@ -550,9 +569,10 @@ In order to update, simply repeat the process.
                                      default; fix file if we can, warn
                                      otherwise)
     --prefer-avconv                  Prefer avconv over ffmpeg for running the
-                                     postprocessors
+                                     postprocessors (Same as --no-prefer-ffmpeg)
     --prefer-ffmpeg                  Prefer ffmpeg over avconv for running the
                                      postprocessors (default)
+                                     (Same as --no-prefer-avconv)
     --ffmpeg-location PATH           Location of the ffmpeg/avconv binary;
                                      either the path to the binary or its
                                      containing directory.

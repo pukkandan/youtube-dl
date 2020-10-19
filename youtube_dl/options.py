@@ -142,11 +142,11 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='update_self',
         help='Update this program to latest version. Make sure that you have sufficient permissions (run with sudo if needed)')
     general.add_option(
-        '-i', '--ignore-errors',
+        '-i', '--ignore-errors', '--no-abort-on-error',
         action='store_true', dest='ignoreerrors', default=True,
         help='Continue on download errors, for example to skip unavailable videos in a playlist (default)')
     general.add_option(
-        '--abort-on-error',
+        '--abort-on-error', '--no-ignore-errors',
         action='store_false', dest='ignoreerrors',
         help='Abort downloading of further videos if an error occurs')
     general.add_option(
@@ -170,7 +170,7 @@ def parseOpts(overrideArguments=None):
         dest='default_search', metavar='PREFIX',
         help='Use this prefix for unqualified URLs. For example "gvsearch2:" downloads two videos from google videos for youtube-dl "large apple". Use the value "auto" to let youtube-dl guess ("auto_warning" to emit a warning when guessing). "error" just throws an error. The default value "fixup_error" repairs broken URLs, but emits an error if this is not possible instead of searching.')
     general.add_option(
-        '--ignore-config',
+        '--ignore-config', '--no-config',
         action='store_true',
         help=(
             'Do not read configuration files. '
@@ -351,6 +351,10 @@ def parseOpts(overrideArguments=None):
         dest='download_archive',
         help='Download only videos not listed in the archive file. Record the IDs of all downloaded videos in it.')
     selection.add_option(
+        '--no-download-archive', metavar='FILE',
+        dest='download_archive', action="store_const", const=None,
+        help='Do not use archive file (default)')
+    selection.add_option(
         '--break-on-existing',
         action='store_true', dest='break_on_existing', default=False,
         help="Stop the download process after attempting to download a file that's in the archive.")
@@ -455,11 +459,11 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='listformats',
         help='List all available formats of requested videos')
     video_format.add_option(
-        '--youtube-include-dash-manifest',
+        '--youtube-include-dash-manifest', '--youtube-skip-dash-manifest',
         action='store_true', dest='youtube_include_dash_manifest', default=True,
         help='Download the DASH manifests and related data on YouTube videos (default)')
     video_format.add_option(
-        '--youtube-skip-dash-manifest',
+        '--youtube-skip-dash-manifest', '--no-youtube-include-dash-manifest',
         action='store_false', dest='youtube_include_dash_manifest',
         help='Do not download the DASH manifests and related data on YouTube videos')
     video_format.add_option(
@@ -519,25 +523,33 @@ def parseOpts(overrideArguments=None):
         dest='fragment_retries', metavar='RETRIES', default=10,
         help='Number of retries for a fragment (default is %default), or "infinite" (DASH, hlsnative and ISM)')
     downloader.add_option(
-        '--skip-unavailable-fragments',
+        '--skip-unavailable-fragments','--no-abort-on-unavailable-fragment',
         action='store_true', dest='skip_unavailable_fragments', default=True,
-        help='Skip unavailable fragments (DASH, hlsnative and ISM)')
+        help='Skip unavailable fragments for DASH, hlsnative and ISM (default)')
     downloader.add_option(
-        '--abort-on-unavailable-fragment',
+        '--abort-on-unavailable-fragment', '--no-skip-unavailable-fragments',
         action='store_false', dest='skip_unavailable_fragments',
         help='Abort downloading when some fragment is not available')
     downloader.add_option(
         '--keep-fragments',
         action='store_true', dest='keep_fragments', default=False,
-        help='Keep downloaded fragments on disk after downloading is finished; fragments are erased by default')
+        help='Keep downloaded fragments on disk after downloading is finished')
+    downloader.add_option(
+        '--no-keep-fragments',
+        action='store_false', dest='keep_fragments',
+        help='Delete downloaded fragments after downloading is finished (default)')
     downloader.add_option(
         '--buffer-size',
         dest='buffersize', metavar='SIZE', default='1024',
         help='Size of download buffer (e.g. 1024 or 16K) (default is %default)')
     downloader.add_option(
+        '--resize-buffer',
+        action='store_false', dest='noresizebuffer',
+        help='The buffer size is automatically resized from an initial value of --buffer-size (default)')
+    downloader.add_option(
         '--no-resize-buffer',
         action='store_true', dest='noresizebuffer', default=False,
-        help='Do not automatically adjust the buffer size. By default, the buffer size is automatically resized from an initial value of SIZE.')
+        help='Do not automatically adjust the buffer size')
     downloader.add_option(
         '--http-chunk-size',
         dest='http_chunk_size', metavar='SIZE', default=None,
@@ -790,31 +802,51 @@ def parseOpts(overrideArguments=None):
     filesystem.add_option(
         '-c', '--continue',
         action='store_true', dest='continue_dl', default=True,
-        help='Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.')
+        help='Resume partially downloaded files (default)')
     filesystem.add_option(
         '--no-continue',
         action='store_false', dest='continue_dl',
-        help='Do not resume partially downloaded files (restart from beginning)')
+        help='Restart download of partially downloaded files from beginning')
+    filesystem.add_option(
+        '--part',
+        action='store_false', dest='nopart', default=False,
+        help='Use .part files instead of writing directly into output file (default)')
     filesystem.add_option(
         '--no-part',
-        action='store_true', dest='nopart', default=False,
+        action='store_true', dest='nopart',
         help='Do not use .part files - write directly into output file')
     filesystem.add_option(
+        '--mtime',
+        action='store_true', dest='updatetime', default=True,
+        help='Use the Last-modified header to set the file modification time (default)')
+    filesystem.add_option(
         '--no-mtime',
-        action='store_false', dest='updatetime', default=True,
+        action='store_false', dest='updatetime',
         help='Do not use the Last-modified header to set the file modification time')
     filesystem.add_option(
         '--write-description',
         action='store_true', dest='writedescription', default=False,
         help='Write video description to a .description file')
     filesystem.add_option(
+        '--no-write-description',
+        action='store_false', dest='writedescription',
+        help='Do not write video description (default)')
+    filesystem.add_option(
         '--write-info-json',
         action='store_true', dest='writeinfojson', default=False,
         help='Write video metadata to a .info.json file')
     filesystem.add_option(
+        '--no-write-info-json',
+        action='store_false', dest='writeinfojson',
+        help='Do not write video metadata (default)')
+    filesystem.add_option(
         '--write-annotations',
         action='store_true', dest='writeannotations', default=False,
         help='Write video annotations to a .annotations.xml file')
+    filesystem.add_option(
+        '--no-write-annotations',
+        action='store_false', dest='writeannotations',
+        help='Do not write video annotations (default)')
     filesystem.add_option(
         '--load-info-json', '--load-info',
         dest='load_info_filename', metavar='FILE',
@@ -823,6 +855,10 @@ def parseOpts(overrideArguments=None):
         '--cookies',
         dest='cookiefile', metavar='FILE',
         help='File to read cookies from and dump cookie jar in')
+    filesystem.add_option(
+        '--no-cookies',
+        action='store_const', const=None, dest='cookiefile', metavar='FILE',
+        help='Do not read/dump cookies (default)')
     filesystem.add_option(
         '--cache-dir', dest='cachedir', default=None, metavar='DIR',
         help='Location in the filesystem where youtube-dl can store some downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dl or ~/.cache/youtube-dl . At the moment, only YouTube player files (for videos with obfuscated signatures) are cached, but that may change.')
@@ -839,6 +875,10 @@ def parseOpts(overrideArguments=None):
         '--write-thumbnail',
         action='store_true', dest='writethumbnail', default=False,
         help='Write thumbnail image to disk')
+    thumbnail.add_option(
+        '--no-write-thumbnail',
+        action='store_false', dest='writethumbnail',
+        help='Do not write thumbnail image to disk (default)')
     thumbnail.add_option(
         '--write-all-thumbnails',
         action='store_true', dest='write_all_thumbnails', default=False,
@@ -895,23 +935,43 @@ def parseOpts(overrideArguments=None):
     postproc.add_option(
         '-k', '--keep-video',
         action='store_true', dest='keepvideo', default=False,
-        help='Keep the video file on disk after the post-processing; the video is erased by default')
+        help='Keep the intermediate video file on disk after post-processing')
+    postproc.add_option(
+        '--no-keep-video',
+        action='store_false', dest='keepvideo',
+        help='Delete the intermediate video file after post-processing (default)')
+    postproc.add_option(
+        '--post-overwrites',
+        action='store_false', dest='nopostoverwrites',
+        help='Overwrite post-processed files (default)')
     postproc.add_option(
         '--no-post-overwrites',
         action='store_true', dest='nopostoverwrites', default=False,
-        help='Do not overwrite post-processed files; the post-processed files are overwritten by default')
+        help='Do not overwrite post-processed files')
     postproc.add_option(
         '--embed-subs',
         action='store_true', dest='embedsubtitles', default=False,
         help='Embed subtitles in the video (only for mp4, webm and mkv videos)')
     postproc.add_option(
+        '--no-embed-subs',
+        action='store_false', dest='embedsubtitles',
+        help='Do not embed subtitles (default)')
+    postproc.add_option(
         '--embed-thumbnail',
         action='store_true', dest='embedthumbnail', default=False,
         help='Embed thumbnail in the audio as cover art')
     postproc.add_option(
+        '--no-embed-thumbnail',
+        action='store_false', dest='embedthumbnail',
+        help='Do not embed thumbnail (default)')
+    postproc.add_option(
         '--add-metadata',
         action='store_true', dest='addmetadata', default=False,
         help='Write metadata to the video file')
+    postproc.add_option(
+        '--no-add-metadata',
+        action='store_false', dest='addmetadata',
+        help='Do not write metadata (default)')
     postproc.add_option(
         '--metadata-from-title',
         metavar='FORMAT', dest='metafromtitle',
@@ -935,11 +995,11 @@ def parseOpts(overrideArguments=None):
             'One of never (do nothing), warn (only emit a warning), '
             'detect_or_warn (the default; fix file if we can, warn otherwise)'))
     postproc.add_option(
-        '--prefer-avconv',
+        '--prefer-avconv', '--no-prefer-ffmpeg',
         action='store_false', dest='prefer_ffmpeg',
         help='Prefer avconv over ffmpeg for running the postprocessors')
     postproc.add_option(
-        '--prefer-ffmpeg',
+        '--prefer-ffmpeg', '--no-prefer-avconv',
         action='store_true', dest='prefer_ffmpeg',
         help='Prefer ffmpeg over avconv for running the postprocessors (default)')
     postproc.add_option(
