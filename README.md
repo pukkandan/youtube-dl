@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.19.00-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.19.01-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -41,6 +41,9 @@ See [Commits](https://github.com/pukkandan/youtube-dl/commits) for more details
 
 ### New Features
 
+#### 2020.10.19.01
+* **Negative Options:** `--no-download-archive`, `--resize-buffer`, `--part`, `--mtime`, `--no-keep-fragments`, `--no-cookies`, `--no-write-annotations`, `--no-write-info-json`, `--no-write-description`, `--no-write-thumbnail`, `--youtube-include-dash-manifest`, `--post-overwrites`, `--no-keep-video`, `--no-embed-subs`, `--no-embed-thumbnail`, `--no-add-metadata`
+
 #### 2020.10.17.01
 * **Live Chat:** `--write-sub --sub-lang live_chat` by @siikamiika
 
@@ -72,6 +75,13 @@ See [Commits](https://github.com/pukkandan/youtube-dl/commits) for more details
 * Fix embedding thumbnails in mp3 by @pauldubois98
 
 ### Other Changes
+
+#### 2020.10.19.01
+* **Format Sort:** Added `-S` as an alias for `--format-sort`
+* **Negative Options:** Added aliases `--no-abort-on-error`, `--no-ignore-errors`, `--no-config`, `--no-abort-on-unavailable-fragment`, `--no-skip-unavailable-fragments`, `--no-youtube-include-dash-manifest`, `--no-youtube-skip-dash-manifest`, `--no-prefer-ffmpeg`, `--no-prefer-avconv`
+* **Default:** Enabled `--ignore-errors` (Breaks backward compatibility)
+* **Deprecated:** `--id` - Same as `--output %(id)s.%(ext)s`
+* Minor changes to code (that doesn't change functionality)
 
 #### 2020.10.17.00
 * **Format Selection:** Any arbitrary field can be now used to filter formats in `-f`
