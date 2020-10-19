@@ -1,6 +1,6 @@
 This is a fork of [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 
-[![](https://img.shields.io/badge/Fork-2020.10.17.02-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
+[![](https://img.shields.io/badge/Fork-2020.10.19.00-brightgreen?style=for-the-badge&logo=GitHub)](https://github.com/pukkandan/youtube-dl)
 [![](https://img.shields.io/badge/youtube--dl-2020.09.20-blue?style=for-the-badge&logo=GitHub)](https://github.com/ytdl-org/youtube-dl)
 
 youtube-dl - download videos from youtube.com or other video platforms
@@ -53,6 +53,10 @@ youtube-dl - download videos from youtube.com or other video platforms
 * Shortcut Options: `--write-link`, `--write-url-link`, `--write-webloc-link`, `--write-desktop-link` by @h-h-h-h
 
 ### Fixes
+
+#### 2020.10.19.00
+* [Partially](https://github.com/pukkandan/youtube-dl/pull/18#issuecomment-711398332) fix youtube and feeds by @xarantolus
+* Fix age-gated videos by @blackjack4494
 
 #### 2020.10.17.02
 * Fix for issue with external downloaders introduced by [live chat](https://github.com/pukkandan/youtube-dl/pull/17)
