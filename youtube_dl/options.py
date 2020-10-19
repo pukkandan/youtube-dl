@@ -143,12 +143,12 @@ def parseOpts(overrideArguments=None):
         help='Update this program to latest version. Make sure that you have sufficient permissions (run with sudo if needed)')
     general.add_option(
         '-i', '--ignore-errors',
-        action='store_true', dest='ignoreerrors', default=False,
-        help='Continue on download errors, for example to skip unavailable videos in a playlist')
+        action='store_true', dest='ignoreerrors', default=True,
+        help='Continue on download errors, for example to skip unavailable videos in a playlist (default)')
     general.add_option(
         '--abort-on-error',
         action='store_false', dest='ignoreerrors',
-        help='Abort downloading of further videos (in the playlist or the command line) if an error occurs')
+        help='Abort downloading of further videos if an error occurs')
     general.add_option(
         '--dump-user-agent',
         action='store_true', dest='dump_user_agent', default=False,
@@ -172,10 +172,11 @@ def parseOpts(overrideArguments=None):
     general.add_option(
         '--ignore-config',
         action='store_true',
-        help='Do not read configuration files. '
-        'When given in the global configuration file /etc/youtube-dl.conf: '
-        'Do not read the user configuration in ~/.config/youtube-dl/config '
-        '(%APPDATA%/youtube-dl/config.txt on Windows)')
+        help=(
+            'Do not read configuration files. '
+            'When given in the global configuration file /etc/youtube-dl.conf: '
+            'Do not read the user configuration in ~/.config/youtube-dl/config '
+            '(%APPDATA%/youtube-dl/config.txt on Windows)'))
     general.add_option(
         '--config-location',
         dest='config_location', metavar='PATH',
@@ -196,7 +197,7 @@ def parseOpts(overrideArguments=None):
     general.add_option(
         '--no-mark-watched',
         action='store_false', dest='mark_watched', default=False,
-        help='Do not mark videos watched (YouTube only)')
+        help='Do not mark videos watched')
     general.add_option(
         '--no-color', '--no-colors',
         action='store_true', dest='no_color',
@@ -207,10 +208,11 @@ def parseOpts(overrideArguments=None):
     network.add_option(
         '--proxy', dest='proxy',
         default=None, metavar='URL',
-        help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
-             'SOCKS proxy, specify a proper scheme. For example '
-             'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
-             'for direct connection')
+        help=(
+            'Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
+            'SOCKS proxy, specify a proper scheme. For example '
+            'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
+            'for direct connection'))
     network.add_option(
         '--socket-timeout',
         dest='socket_timeout', type=float, default=None, metavar='SECONDS',
@@ -235,8 +237,9 @@ def parseOpts(overrideArguments=None):
     geo.add_option(
         '--geo-verification-proxy',
         dest='geo_verification_proxy', default=None, metavar='URL',
-        help='Use this proxy to verify the IP address for some geo-restricted sites. '
-        'The default proxy specified by --proxy (or none, if the option is not present) is used for the actual downloading.')
+        help=(
+            'Use this proxy to verify the IP address for some geo-restricted sites. '
+            'The default proxy specified by --proxy (or none, if the option is not present) is used for the actual downloading.'))
     geo.add_option(
         '--cn-verification-proxy',
         dest='cn_verification_proxy', default=None, metavar='URL',
@@ -330,8 +333,7 @@ def parseOpts(overrideArguments=None):
             '100 times and disliked less than 50 times (or the dislike '
             'functionality is not available at the given service), but who '
             'also have a description, use --match-filter '
-            '"like_count > 100 & dislike_count <? 50 & description" .'
-        ))
+            '"like_count > 100 & dislike_count <? 50 & description" .'))
     selection.add_option(
         '--no-playlist',
         action='store_true', dest='noplaylist', default=False,
@@ -405,10 +407,11 @@ def parseOpts(overrideArguments=None):
     video_format.add_option(
         '-f', '--format',
         action='store', dest='format', metavar='FORMAT', default=None,
-        help='Video format code, see the "FORMAT SELECTION" for all the info')
+        help='Video format string, see the "FORMAT SELECTION" for more info')
     video_format.add_option(
-        '--format-sort',
-        action='store', dest='format_sort', metavar='FORMAT', default=None,
+        '-S', '--format-sort', 
+        dest='format_sort', metavar='FORMAT', default=[],
+        action='callback', callback=_comma_separated_values_options_callback, type='str',
         help=(
             'Sort the formats by the fields given. '
             'Default order: avoid_bad, has_video, extractor, language, '
@@ -538,8 +541,9 @@ def parseOpts(overrideArguments=None):
     downloader.add_option(
         '--http-chunk-size',
         dest='http_chunk_size', metavar='SIZE', default=None,
-        help='Size of a chunk for chunk-based HTTP downloading (e.g. 10485760 or 10M) (default is disabled). '
-             'May be useful for bypassing bandwidth throttling imposed by a webserver (experimental)')
+        help=(
+            'Size of a chunk for chunk-based HTTP downloading (e.g. 10485760 or 10M) (default is disabled). '
+            'May be useful for bypassing bandwidth throttling imposed by a webserver (experimental)'))
     downloader.add_option(
         '--test',
         action='store_true', dest='test', default=False,
@@ -571,13 +575,15 @@ def parseOpts(overrideArguments=None):
     downloader.add_option(
         '--hls-use-mpegts',
         dest='hls_use_mpegts', action='store_true',
-        help='Use the mpegts container for HLS videos, allowing to play the '
-             'video while downloading (some players may not be able to play it)')
+        help=(
+            'Use the mpegts container for HLS videos, allowing to play the '
+            'video while downloading (some players may not be able to play it)'))
     downloader.add_option(
         '--external-downloader',
         dest='external_downloader', metavar='COMMAND',
-        help='Use the specified external downloader. '
-             'Currently supports %s' % ','.join(list_external_downloaders()))
+        help=(
+            'Use the specified external downloader. '
+            'Currently supports %s' % ','.join(list_external_downloaders()) ))
     downloader.add_option(
         '--external-downloader-args',
         dest='external_downloader_args', metavar='ARGS',
@@ -593,8 +599,8 @@ def parseOpts(overrideArguments=None):
         action='store_true', dest='no_check_certificate', default=False,
         help='Suppress HTTPS certificate validation')
     workarounds.add_option(
-        '--prefer-insecure',
-        '--prefer-unsecure', action='store_true', dest='prefer_insecure',
+        '--prefer-insecure', '--prefer-unsecure',
+        action='store_true', dest='prefer_insecure',
         help='Use an unencrypted connection to retrieve information about the video. (Currently supported only for YouTube)')
     workarounds.add_option(
         '--user-agent',
@@ -694,7 +700,7 @@ def parseOpts(overrideArguments=None):
     verbosity.add_option(
         '--force-write-download-archive', '--force-write-archive',
         action='store_true', dest='force_write_download_archive', default=False,
-        help='Force download archive entries to be written as far as no errors occur, even if --skip-download or any simulation switch is used.')
+        help='Force download archive entries to be written as far as no errors occur, even if --skip-download or any other simulation switch is used.')
     verbosity.add_option(
         '--newline',
         action='store_true', dest='progress_with_newline', default=False,
@@ -733,8 +739,8 @@ def parseOpts(overrideArguments=None):
         help='Contact the youtube-dl server for debugging')
     verbosity.add_option(
         '--no-call-home',
-        dest='call_home', action='store_false', default=False,
-        help='Do NOT contact the youtube-dl server for debugging')
+        dest='call_home', action='store_false',
+        help='Do not contact the youtube-dl server for debugging (default)')
 
     filesystem = optparse.OptionGroup(parser, 'Filesystem Options')
     filesystem.add_option(
@@ -744,7 +750,7 @@ def parseOpts(overrideArguments=None):
              "Lines starting with '#', ';' or ']' are considered as comments and ignored.")
     filesystem.add_option(
         '--id', default=False,
-        action='store_true', dest='useid', help='Use only video ID in file name')
+        action='store_true', dest='useid', help=optparse.SUPPRESS_HELP)
     filesystem.add_option(
         '-o', '--output',
         dest='outtmpl', metavar='TEMPLATE',
@@ -821,7 +827,7 @@ def parseOpts(overrideArguments=None):
         '--cache-dir', dest='cachedir', default=None, metavar='DIR',
         help='Location in the filesystem where youtube-dl can store some downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dl or ~/.cache/youtube-dl . At the moment, only YouTube player files (for videos with obfuscated signatures) are cached, but that may change.')
     filesystem.add_option(
-        '--no-cache-dir', action='store_const', const=False, dest='cachedir',
+        '--no-cache-dir', action='store_false', dest='cachedir',
         help='Disable filesystem caching')
     filesystem.add_option(
         '--rm-cache-dir',
@@ -875,11 +881,13 @@ def parseOpts(overrideArguments=None):
     postproc.add_option(
         '--remux-video',
         metavar='FORMAT', dest='remuxvideo', default=None,
-        help='Remux the video to another container format if necessary (currently supported: mp4|mkv, target container format must support video / audio encoding, remuxing may fail)')
+        help=(
+            'Remux the video into another container if necessary (currently supported: mp4|mkv). ' 
+            'If target container does not support the video/audio codec, remuxing will fail'))
     postproc.add_option(
         '--recode-video',
         metavar='FORMAT', dest='recodevideo', default=None,
-        help='Encode the video to another format if necessary (currently supported: mp4|flv|ogg|webm|mkv|avi)')
+        help='Re-encode the video into another format if re-encoding is necessary (currently supported: mp4|flv|ogg|webm|mkv|avi)')
     postproc.add_option(
         '--postprocessor-args',
         dest='postprocessor_args', metavar='ARGS',
@@ -907,13 +915,14 @@ def parseOpts(overrideArguments=None):
     postproc.add_option(
         '--metadata-from-title',
         metavar='FORMAT', dest='metafromtitle',
-        help='Parse additional metadata like song title / artist from the video title. '
-             'The format syntax is the same as --output. Regular expression with '
-             'named capture groups may also be used. '
-             'The parsed parameters replace existing values. '
-             'Example: --metadata-from-title "%(artist)s - %(title)s" matches a title like '
-             '"Coldplay - Paradise". '
-             'Example (regex): --metadata-from-title "(?P<artist>.+?) - (?P<title>.+)"')
+        help=(
+            'Parse additional metadata like song title / artist from the video title. '
+            'The format syntax is the same as --output. Regular expression with '
+            'named capture groups may also be used. '
+            'The parsed parameters replace existing values. '
+            'Example: --metadata-from-title "%(artist)s - %(title)s" matches a title like '
+            '"Coldplay - Paradise". '
+            'Example (regex): --metadata-from-title "(?P<artist>.+?) - (?P<title>.+)"'))
     postproc.add_option(
         '--xattrs',
         action='store_true', dest='xattrs', default=False,
@@ -921,9 +930,10 @@ def parseOpts(overrideArguments=None):
     postproc.add_option(
         '--fixup',
         metavar='POLICY', dest='fixup', default='detect_or_warn',
-        help='Automatically correct known faults of the file. '
-             'One of never (do nothing), warn (only emit a warning), '
-             'detect_or_warn (the default; fix file if we can, warn otherwise)')
+        help=(
+            'Automatically correct known faults of the file. '
+            'One of never (do nothing), warn (only emit a warning), '
+            'detect_or_warn (the default; fix file if we can, warn otherwise)'))
     postproc.add_option(
         '--prefer-avconv',
         action='store_false', dest='prefer_ffmpeg',

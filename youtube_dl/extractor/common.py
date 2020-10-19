@@ -1359,8 +1359,7 @@ class InfoExtractor(object):
             raise ExtractorError('No video formats found')
 
         def _get_sort_list():
-            sort = self._downloader.params.get('format_sort', '')
-            sort = sort.split(',') if isinstance(sort, str) else []
+            sort = self._downloader.params.get('format_sort')
             if self._downloader.params.get('verbose', False):
                 self._downloader.to_screen('[debug] Sort order given by user: %s' % sort)
                 if field_preference:

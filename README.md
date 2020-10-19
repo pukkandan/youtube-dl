@@ -28,7 +28,7 @@ youtube-dl - download videos from youtube.com or other video platforms
     * [Adobe Pass Options](#adobe-pass-options)
     * [Post-processing Options](#post-processing-options)
 - [CONFIGURATION](#configuration)
-    * [Authentication with `.netrc` file](#authentication-with-netrc-file)
+    * [Authentication with .netrc file](#authentication-with-netrc-file)
 - [OUTPUT TEMPLATE](#output-template)
     * [Output template and Windows batch files](#output-template-and-windows-batch-files)
 - [FORMAT SELECTION](#format-selection)
@@ -37,20 +37,21 @@ youtube-dl - download videos from youtube.com or other video platforms
 
 
 # CHANGES
+See [Commits](https://github.com/pukkandan/youtube-dl/commits) for more details
 
 ### New Features
 
 #### 2020.10.17.01
-* Live Chat: Can download live chat using `--write-sub --sub-lang live_chat`
+* **Live Chat:** `--write-sub --sub-lang live_chat` by @siikamiika
 
 #### 2020.09.22.00
-* Format Sort: `--format-sort`, `--format-sort-force`
-* Negative Options: `--no-include-ads`, `--no-write-sub`, `--no-write-auto-sub`, `--no-playlist-reverse`, `--no-restrict-filenames`, `--youtube-include-dash-manifest`, `--no-format-sort-force`
+* **Format Sort:** `--format-sort`, `--format-sort-force`
+* **Negative Options:** `--no-include-ads`, `--no-write-sub`, `--no-write-auto-sub`, `--no-playlist-reverse`, `--no-restrict-filenames`, `--youtube-include-dash-manifest`, `--no-format-sort-force`
+* **Shortcut Options:** `--write-link`, `--write-url-link`, `--write-webloc-link`, `--write-desktop-link` by @h-h-h-h
 * `--flat-videos`
 * `--remux-video` by @Zocker1999NET
 * `--break-on-existing` by @gergesh
 * `--force-write-archive` by @h-h-h-h
-* Shortcut Options: `--write-link`, `--write-url-link`, `--write-webloc-link`, `--write-desktop-link` by @h-h-h-h
 
 ### Fixes
 
@@ -59,35 +60,34 @@ youtube-dl - download videos from youtube.com or other video platforms
 * Fix age-gated videos by @blackjack4494
 
 #### 2020.10.17.02
-* Fix for issue with external downloaders introduced by [live chat](https://github.com/pukkandan/youtube-dl/pull/17)
+* Fix for issue with external downloaders introduced by [#17](https://github.com/pukkandan/youtube-dl/pull/17)
 
 #### 2020.09.23.00
-* Dropped [#8](https://github.com/pukkandan/youtube-dl/commit/5bc0c7eb03d132fa121462b73f836be8b422ae53). This has been fixed in the main repo
+* Dropped [#8](https://github.com/pukkandan/youtube-dl/pull/8). The issue this addresses has been fixed in the main repo
 
 #### 2020.09.22.00
-* Fix for youtube chapters extractor by @gschizas
-* Fix for youtube description by @randombyte-developer
-* Added embedding of thumbnails in mkv files by @MrDoritos
-* Fix for embedding thumbnail in mp3 by @pauldubois98
+* Fix youtube chapters extractor by @gschizas
+* Fix youtube description by @randombyte-developer
+* Fix embedding thumbnails in mkv by @MrDoritos
+* Fix embedding thumbnails in mp3 by @pauldubois98
 
 ### Other Changes
 
 #### 2020.10.17.00
-* Format Selection: Relaxed validation for format filters so that any arbitrary field can be now used
+* **Format Selection:** Any arbitrary field can be now used to filter formats in `-f`
 
 #### 2020.10.16.01
-* Format Sort: Changed default sort order. This version may select format that is different from previous versions, at the same settings
-* Format Selection: 'bestvideo' and 'worstvideo' can now download formats that also has audio
+* **Format Sort:** Changed default sort order. (Breaks backward compatibility)
+* **Format Selection:** 'bestvideo' and 'worstvideo' may now download formats that also has audio (Breaks backward compatibility)
 
 #### 2020.10.16.00
-* Format Sort: Added some new fields and renamed old fields
+* **Format Sort:** Added some new fields and renamed old fields (Breaks backward compatibility)
 
 #### 2020.09.22.00
 * Restructured README.md
 
-
 #### 2020.09.21.00
-* Created this fork, updated README.md and created version.txt
+* Created this fork
 
 
 # ABOUT THIS FORK
@@ -127,10 +127,8 @@ In order to update, simply repeat the process.
                                      (run with sudo if needed)
                                      
     -i, --ignore-errors              Continue on download errors, for example to
-                                     skip unavailable videos in a playlist
-    --abort-on-error                 Abort downloading of further videos (in the
-                                     playlist or the command line) if an error
-                                     occurs
+                                     skip unavailable videos in a playlist (default)
+    --abort-on-error                 Abort downloading of further videos if an error
     --dump-user-agent                Display the current browser identification
     --list-extractors                List all supported extractors
     --extractor-descriptions         Output descriptions of all supported
@@ -434,7 +432,7 @@ In order to update, simply repeat the process.
     -f, --format FORMAT              Video format code, see the "FORMAT
                                      SELECTION" for all the info
                                      Note that the OS caches the URL based on the file path.
-    --format-sort SORTORDER          Sort the formats by the fields given. 
+    -S, --format-sort SORTORDER      Sort the formats by the fields given. 
                                      Default order: avoid_bad, has_video, extractor, language, 
                                      height, width, proto, fps, codec, filesize, filesize_approx, 
                                      tbr, vbr, has_audio, abr, audio_codec, quality, source, format_id.
